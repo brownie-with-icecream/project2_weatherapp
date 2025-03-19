@@ -1,38 +1,82 @@
 const apiKey = "ad44533f2a63421d86d153424251903"; // Your WeatherAPI Key
+const baseUrl = "http://api.weatherapi.com/v1"; // API Base URL
+const endpoint = "/forecast.json"; // API Endpoint
+const days = 7; // Always fetch 7 days of data
 
-function getWeather() {
-    const city = document.getElementById("cityInput").value;
-    const weatherCard = document.getElementById("weatherCard");
+// 🌍 Fetch Weather Data
+async function getWeather() {
+    const city = document.getElementById("cityInput").value.trim();
+    const tableBody = document.getElementById("weatherTableBody");
 
-    if (city === "") {
+    // Clear previous data
+    tableBody.innerHTML = "";
+
+    if (!city) {
         alert("Please enter a city name!");
         return;
     }
 
-    fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("City not found!");
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById("cityName").textContent = data.location.name;
-            document.getElementById("temperature").textContent = `🌡️ ${data.current.temp_c}°C`;
-            document.getElementById("weatherDescription").textContent = `☁️ ${data.current.condition.text}`;
+    // Construct API URL
+    const url = `${baseUrl}${endpoint}?key=${apiKey}&q=${city}&days=${days}&aqi=no`;
 
-            // Set weather icon
-            document.getElementById("weatherIcon").src = data.current.condition.icon;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-            // Show the weather card with animation
-            weatherCard.style.display = "block";
-            weatherCard.style.opacity = "0";
-            setTimeout(() => {
-                weatherCard.style.opacity = "1";
-            }, 100); // Smooth fade-in effect
-        })
-        .catch(error => {
-            console.error("Error fetching weather:", error);
-            alert("City not found! Try another one.");
+        // Error handling for invalid city
+        if (data.error) {
+            alert("City not found! Please enter a valid city.");
+            return;
+        }
+
+        // Populate the table with forecast data
+        data.forecast.forecastday.forEach(day => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${day.date}</td>
+                <td>
+                    <img src="${day.day.condition.icon}" alt="${day.day.condition.text}">
+                    ${day.day.condition.text}
+                </td>
+                <td>${day.day.maxtemp_c}°C</td>
+                <td>${day.day.mintemp_c}°C</td>
+                <td>${day.day.avgtemp_c}°C</td>
+                <td>${day.day.avghumidity}%</td>
+                <td>${day.day.maxwind_kph} kph</td>
+                <td>${day.day.daily_chance_of_rain}%</td>
+                <td>${day.astro.sunrise}</td>
+                <td>${day.astro.sunset}</td>
+            `;
+
+            tableBody.appendChild(row);
         });
+
+    } catch (error) {
+        console.error("Error fetching weather:", error);
+        alert("Something went wrong. Please try again later.");
+    }
 }
+
+// 🌙 Dark Mode Toggle
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleSwitch = document.getElementById("darkModeToggle");
+    const body = document.body;
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem("darkMode") === "enabled") {
+        body.classList.add("dark-mode");
+        toggleSwitch.checked = true;
+    }
+
+    // Toggle Dark Mode on Switch Click
+    toggleSwitch.addEventListener("change", function () {
+        if (this.checked) {
+            body.classList.add("dark-mode");
+            localStorage.setItem("darkMode", "enabled"); // Save preference
+        } else {
+            body.classList.remove("dark-mode");
+            localStorage.setItem("darkMode", "disabled"); // Save preference
+        }
+    });
+});
