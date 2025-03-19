@@ -130,8 +130,7 @@ button:hover {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
 /* Glow effect on text */
 .weather-card h2, .weather-card p {
     text-shadow: 0 0 8px white;
-}
+} 
