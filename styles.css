@@ -1,43 +1,136 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Orbitron', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
     margin: 0;
+    background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background-size: 300% 300%;
+    animation: gradientBG 10s infinite ease-in-out;
+    color: white;
+    overflow: hidden;
+}
+
+/* Background animation */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .container {
     text-align: center;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    width: 350px;
+    position: relative;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Floating effect */
+.container:hover {
+    transform: scale(1.05);
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #ffcc00;
+    text-shadow: 0 0 10px #ffcc00;
+}
+
+/* Glowing input */
+.input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 input {
-    padding: 10px;
-    margin: 10px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    width: 70%;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    outline: none;
+    transition: 0.3s ease;
 }
 
+input:focus {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Pulsating button */
 button {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: white;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
-    border-radius: 5px;
+    background: #ffcc00;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 0 10px #ffcc00;
+    transition: 0.3s ease-in-out;
+    position: relative;
+    animation: pulse 1.5s infinite;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: #ff9900;
+    box-shadow: 0 0 15px #ff9900;
+    transform: scale(1.1);
 }
 
-#weatherResult {
-    margin-top: 20px;
+/* Button pulse animation */
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px #ffcc00; }
+    50% { box-shadow: 0 0 20px #ffcc00; }
+    100% { box-shadow: 0 0 10px #ffcc00; }
 }
+
+/* Weather card with neon glow */
+.weather-card {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    transform: translateY(10px);
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-in-out forwards;
+}
+
+/* Fade-in effect */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Weather icon animation */
+.weather-card img {
+    margin-top: 10px;
+    width: 100px;
+    animation: rotateIcon 3s infinite linear;
+}
+
+/* Rotate weather icon */
+@keyframes rotateIcon {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Glow effect on text */
+.weather-card h2, .weather-card p {
+    text-shadow: 0 0 8px white;
+} 
