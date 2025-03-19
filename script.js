@@ -1,4 +1,4 @@
-const apiKey = "YOUR_API_KEY"; // Replace with your OpenWeatherMap API Key
+const apiKey = "ad44533f2a63421d86d153424251903"; // Your WeatherAPI Key
 
 function getWeather() {
     const city = document.getElementById("cityInput").value;
@@ -9,21 +9,20 @@ function getWeather() {
         return;
     }
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.cod === "404") {
-                alert("City not found! Try another one.");
-                return;
+    fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("City not found!");
             }
-
-            document.getElementById("cityName").textContent = data.name;
-            document.getElementById("temperature").textContent = `🌡️ ${data.main.temp}°C`;
-            document.getElementById("weatherDescription").textContent = `☁️ ${data.weather[0].description}`;
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById("cityName").textContent = data.location.name;
+            document.getElementById("temperature").textContent = `🌡️ ${data.current.temp_c}°C`;
+            document.getElementById("weatherDescription").textContent = `☁️ ${data.current.condition.text}`;
 
             // Set weather icon
-            const iconCode = data.weather[0].icon;
-            document.getElementById("weatherIcon").src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+            document.getElementById("weatherIcon").src = data.current.condition.icon;
 
             // Show the weather card with animation
             weatherCard.style.display = "block";
@@ -34,6 +33,6 @@ function getWeather() {
         })
         .catch(error => {
             console.error("Error fetching weather:", error);
-            alert("Something went wrong. Try again later!");
+            alert("City not found! Try another one.");
         });
 }
