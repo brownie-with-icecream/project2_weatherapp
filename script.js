@@ -1,5 +1,5 @@
 const apiKey = "ad44533f2a63421d86d153424251903"; // Your WeatherAPI Key
-const baseUrl = "http://api.weatherapi.com/v1"; // API Base URL
+const baseUrl = "https://api.weatherapi.com/v1"; // API Base URL
 const endpoint = "/forecast.json"; // API Endpoint
 const days = 7; // Always fetch 7 days of data
 
